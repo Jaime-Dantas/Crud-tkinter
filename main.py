@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkcalendar import Calendar, DateEntry
 from cgitb import text
-from tkinter import font
+from tkinter import font, Button
 
 # Definir cores
 c0 = "#f0f3f5"  # Preto
@@ -72,6 +72,9 @@ lbl_despesa = tk.Label(frame_inferior, text='Status da Despesa *', anchor='nw', 
 lbl_despesa.place(x=270, y=250)
 etr_despesa = tk.Entry(frame_inferior, width=25, justify='left', relief='solid')
 etr_despesa.place(x=270, y=280)
+
+#Botão Adicionar
+btn_adicionar = Button()
 
 
 
