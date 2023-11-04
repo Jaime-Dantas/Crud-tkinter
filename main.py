@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkcalendar import Calendar, DateEntry
-from cgitb import text
-from tkinter import font, Button
+
+from tkinter import font, Button, ttk, messagebox
+from view import *
+
 
 # Definir cores
 c0 = "#f0f3f5"  # Preto
@@ -20,7 +22,7 @@ janela = tk.Tk()
 janela.title("SADP")
 janela.geometry('1200x720')
 janela.configure(background=c9)
-janela.resizable(width=False, height=False)
+# janela.resizable(width=False, height=False)
 
 # Criar os frames
 frame_superior = tk.Frame(janela, width=480, height=50, background=c2, relief='flat')
@@ -32,11 +34,13 @@ frame_inferior.grid(row=1, column=0, sticky=tk.NSEW, padx=0, pady=1)
 frame_direita = tk.Frame(janela, width=800, height=710, background=c1, relief='flat')
 frame_direita.grid(row=0, column=1, rowspan=2, padx=5, pady=0, sticky=tk.NSEW)
 
-##=========== Label Superior ===============##
+##======================= Tela Esquerda ==========================##
+
+#-------------Label Superior ---------------#
 app_nome = tk.Label(frame_superior, text='SADP - Sistema de Administração de Despesas Pessoais', anchor='nw', font=('Ivy', 13, 'bold'), bg=c2, fg=c1, relief='flat')
 app_nome.place(x=10, y=20)
 
-##=========== Label inferior ===============##
+#------------- Label inferior ---------------#
 #Campo Nome#
 lbl_nome = tk.Label(frame_inferior, text='Nome *', anchor='nw', font=('Ivy', 11, 'bold'), bg=c1, fg=c4, relief='flat')
 lbl_nome.place(x=10, y=10)
@@ -73,14 +77,110 @@ lbl_despesa.place(x=270, y=250)
 etr_despesa = tk.Entry(frame_inferior, width=25, justify='left', relief='solid')
 etr_despesa.place(x=270, y=280)
 
+#-------- Funções CRUD Adicionar --------#
+#- Adicionar -#
+def adcionar():
+  nome = etr_nome.get()
+  valor = etr_valor.get()
+  tipo_pagamento = etr_pagamento.get()
+  descricao = etr_descricao.get()
+  data_compra = etr_data.get()
+  status_despesa = etr_despesa.get()
+
+  lista = [nome, valor, tipo_pagamento, descricao, data_compra, status_despesa]
+
+  if nome=='':
+      messagebox.showerror('Erro','Insira um valor no campo')
+  else:
+      adicionarProduto(lista)
+      messagebox.showinfo('Sucesso','Informação inserida com sucesso!')
+
+      etr_nome.delete(0,'end')
+      etr_valor.delete(0,'end')
+      etr_pagamento.delete(0,'end')
+      etr_descricao.delete(0,'end')
+      etr_data.delete(0,'end')
+      etr_despesa.delete(0,'end') 
+
+  for widget in  frame_direita.winfo_children():
+      widget.destroy()
+
+  exibir() 
+
+#- Adicionar -#
+
+#- Editar -#
+
+def editar():
+    pass
+
+#- Adicionar -#
+
+
+
+#---------Botões-----------#
+
 #Botão Adicionar
-btn_adicionar = Button()
+btn_adicionar = Button(frame_inferior, command=adcionar,text='Adicionar', width=10, font=('Ivy', 10, 'bold'), bg=c6, fg=c1, relief='raised', overrelief='ridge')
+btn_adicionar.place(x=15,y=400)
+
+#Botão Editar
+btn_editar = Button(frame_inferior, text='Editar', width=10, font=('Ivy', 10, 'bold'), bg=c2, fg=c1, relief='raised', overrelief='ridge')
+btn_editar.place(x=150,y=400)
+
+#Botão Deletar
+btn_deletar = Button(frame_inferior, text='Deletar', width=10, font=('Ivy', 10, 'bold'), bg=c7, fg=c1, relief='raised', overrelief='ridge')
+btn_deletar.place(x=280,y=400)
+
+ 
 
 
 
 
+##======================= Tela Direita ===========================##
+def exibir():
+  
+    lista = exibirProduto()
+
+    # lista para cabecario
+    tabela_head = ['ID','Nome','valor','Método de pagamento', 'Descrição', 'Data da despesa','Status da Despesa']
 
 
+
+    # criando a tabela
+    tree = ttk.Treeview(frame_direita, selectmode="extended", columns=tabela_head, show="headings")
+
+    # vertical scrollbar
+    vsb = ttk.Scrollbar(frame_direita, orient="vertical", command=tree.yview)
+
+    # horizontal scrollbar
+    hsb = ttk.Scrollbar( frame_direita, orient="horizontal", command=tree.xview)
+
+    tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    tree.grid(column=0, row=0, sticky='nsew')
+    vsb.grid(column=1, row=0, sticky='ns')
+    hsb.grid(column=0, row=1, sticky='ew')
+
+    frame_direita.grid_rowconfigure(0, weight=12)
+
+
+    hd=["nw","center","nw","nw","nw","center","center"]
+    h=[30,170,140,100,120,50,100]
+    n=0
+
+    for col in tabela_head:
+        tree.heading(col, text=col.title(), anchor='center')
+        
+        tree.column(col, width=h[n],anchor=hd[n])
+        
+        n+=1
+
+    for item in lista:
+        tree.insert('', 'end', values=item)
+
+# Chamando a função Exibir
+exibir()
+    
 
 
 
