@@ -28,11 +28,12 @@ def exibirProduto():
     return info
 
 # Update
-def atualizarProduto(nome, id):
+def atualizarProduto(i):
     with bd:
         cursor = bd.cursor()
-        query = "UPDATE Produtos SET nome=? WHERE id=?"
-        cursor.execute(query, (nome, id))
+        query = "UPDATE Produtos SET nome=?, data_compra=?, valor=?, metodo_pagamento=?, descricao=?, status_despesa=? WHERE id=?"
+        cursor.execute(query, i)
+
 
 # Delete
 def deletarProduto(id):

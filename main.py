@@ -78,6 +78,7 @@ etr_despesa = tk.Entry(frame_inferior, width=25, justify='left', relief='solid')
 etr_despesa.place(x=270, y=280)
 
 #-------- Funções CRUD Adicionar --------#
+global tree
 #- Adicionar -#
 def adcionar():
   nome = etr_nome.get()
@@ -112,7 +113,70 @@ def adcionar():
 #- Editar -#
 
 def editar():
-    pass
+    try:
+        treev_dados = tree.focus()
+        treev_dicio = tree.item(treev_dados)
+        tree_lista = treev_dicio['values']
+
+        valor_id = tree_lista[0]
+
+        etr_nome.delete(0,'end')
+        etr_valor.delete(0,'end')
+        etr_pagamento.delete(0,'end')
+        etr_descricao.delete(0,'end')
+        etr_data.delete(0,'end')
+        etr_despesa.delete(0,'end') 
+
+
+        etr_nome.insert(0,tree_lista[1])
+        etr_valor.insert(0,tree_lista[2])
+        etr_pagamento.insert(0,tree_lista[3])
+        etr_descricao.insert(0,tree_lista[4])
+        etr_data.insert(0,tree_lista[5])
+        etr_despesa.insert(0,tree_lista[6]) 
+
+        def atualizar():
+            nome = etr_nome.get()
+            valor = etr_valor.get()
+            tipo_pagamento = etr_pagamento.get()
+            descricao = etr_descricao.get()
+            data_compra = etr_data.get()
+            status_despesa = etr_despesa.get()
+
+            lista = [nome, valor, tipo_pagamento, descricao, data_compra, status_despesa,valor_id]
+
+            if nome=='':
+                messagebox.showerror('Erro','Insira um valor no campo')
+            else:
+                atualizarProduto(lista)
+                messagebox.showinfo('Sucesso','Informação atualizadas com sucesso!')
+
+                etr_nome.delete(0,'end')
+                etr_valor.delete(0,'end')
+                etr_pagamento.delete(0,'end')
+                etr_descricao.delete(0,'end')
+                etr_data.delete(0,'end')
+                etr_despesa.delete(0,'end') 
+
+            for widget in  frame_direita.winfo_children():
+                widget.destroy()
+
+            exibir()    
+
+        #Botão Editar
+        btn_Atualizar = Button(frame_inferior,command=atualizar, text='Atualizar', width=10, font=('Ivy', 10, 'bold'), bg=c2, fg=c1, relief='raised', overrelief='ridge')
+        btn_Atualizar.place(x=150,y=400)
+
+  
+      
+            
+
+        
+    except IndexError:
+        messagebox.showerror('Erro','Selecione a informação que deseja editar')      
+
+
+        
 
 #- Adicionar -#
 
@@ -125,7 +189,7 @@ btn_adicionar = Button(frame_inferior, command=adcionar,text='Adicionar', width=
 btn_adicionar.place(x=15,y=400)
 
 #Botão Editar
-btn_editar = Button(frame_inferior, text='Editar', width=10, font=('Ivy', 10, 'bold'), bg=c2, fg=c1, relief='raised', overrelief='ridge')
+btn_editar = Button(frame_inferior,command=editar, text='Editar', width=10, font=('Ivy', 10, 'bold'), bg=c2, fg=c1, relief='raised', overrelief='ridge')
 btn_editar.place(x=150,y=400)
 
 #Botão Deletar
@@ -139,7 +203,8 @@ btn_deletar.place(x=280,y=400)
 
 ##======================= Tela Direita ===========================##
 def exibir():
-  
+    global tree
+
     lista = exibirProduto()
 
     # lista para cabecario
