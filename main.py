@@ -5,7 +5,7 @@ from tkinter import font, Button, ttk, messagebox
 from view import *
 
 
-# Definir cores
+# Definindo as cores
 c0 = "#f0f3f5"  # Preto
 c1 = "#feffff"  # branco
 c2 = "#4fa882"  # verde
@@ -18,14 +18,14 @@ c8 = "#263238"  # + verde
 c9 = "#e9edf5"  # sky blue
 c10 ="#F3F3F3"  # WhiteDark
 
-# Criar a janela
+# Criando a janela
 janela = tk.Tk()
 janela.title("SADP")
 janela.geometry('1450x550')
 janela.configure(background=c9)
 janela.resizable(width=False, height=False)
 
-# Criar os frames
+# Criação dos frames
 frame_superior = tk.Frame(janela, width=530, height=50, background=c2, relief='flat')
 frame_superior.grid(row=0, column=0)
 
@@ -86,8 +86,8 @@ imagem_tk = ImageTk.PhotoImage(imagem_pillow)
 label_imagem = tk.Label(janela, image=imagem_tk, width=520, height=270)
 label_imagem.place(x=1,y=170)
 
-#-------- Funções CRUD Adicionar --------#
-global tree
+#-------- Funções CRUD  --------#
+global arvore
 #- Adicionar -#
 def adcionar():
   nome = etr_nome.get()
@@ -122,11 +122,11 @@ def adcionar():
 
 def editar():
     try:
-        treev_dados = tree.focus()
-        treev_dicio = tree.item(treev_dados)
-        tree_lista = treev_dicio['values']
+        arvorev_dados = arvore.focus()
+        arvorev_dicio = arvore.item(arvorev_dados)
+        arvore_lista = arvorev_dicio['values']
 
-        valor_id = tree_lista[0]
+        valor_id = arvore_lista[0]
 
         etr_nome.delete(0,'end')
         etr_valor.delete(0,'end')
@@ -136,12 +136,12 @@ def editar():
         despesa.delete(0,'end') 
 
 
-        etr_nome.insert(0,tree_lista[1])
-        etr_valor.insert(0,tree_lista[2])
-        pagamento.insert(0,tree_lista[3])
-        etr_descricao.insert(0,tree_lista[4])
-        etr_data.insert(0,tree_lista[5])
-        despesa.insert(0,tree_lista[6]) 
+        etr_nome.insert(0,arvore_lista[1])
+        etr_valor.insert(0,arvore_lista[2])
+        pagamento.insert(0,arvore_lista[3])
+        etr_descricao.insert(0,arvore_lista[4])
+        etr_data.insert(0,arvore_lista[5])
+        despesa.insert(0,arvore_lista[6]) 
 
         def atualizar():
             nome = etr_nome.get()
@@ -185,11 +185,11 @@ def editar():
 
 def deletar():
     try:
-        treev_dados = tree.focus()
-        treev_dicio = tree.item(treev_dados)
-        tree_lista = treev_dicio['values']
+        arvorev_dados = arvore.focus()
+        arvorev_dicio = arvore.item(arvorev_dados)
+        arvore_lista = arvorev_dicio['values']
 
-        valor_id = tree_lista[0] 
+        valor_id = arvore_lista[0] 
 
         deletarProduto(valor_id)
         messagebox.showinfo('Sucesso','Item apagado com sucesso!')   
@@ -223,14 +223,10 @@ btn_editar.place(x=155,y=400)
 btn_deletar = Button(frame_inferior,command=deletar, text='Deletar', width=10, font=('Ivy', 10, 'bold'), bg=c7, fg=c1, relief='raised', overrelief='ridge')
 btn_deletar.place(x=275,y=400)
 
- 
-
-
-
 
 ##======================= Tela Direita ===========================##
 def exibir():
-    global tree
+    global arvore
 
     lista = exibirProduto()
 
@@ -240,16 +236,16 @@ def exibir():
 
 
     # criando a tabela
-    tree = ttk.Treeview(frame_direita, selectmode="extended", columns=tabela_head, show="headings")
+    arvore = ttk.Treeview(frame_direita, selectmode="extended", columns=tabela_head, show="headings")
 
     # vertical scrollbar
-    vsb = ttk.Scrollbar(frame_direita, orient="vertical", command=tree.yview)
+    vsb = ttk.Scrollbar(frame_direita, orient="vertical", command=arvore.yview)
 
     # horizontal scrollbar
-    hsb = ttk.Scrollbar( frame_direita, orient="horizontal", command=tree.xview)
+    hsb = ttk.Scrollbar( frame_direita, orient="horizontal", command=arvore.xview)
 
-    tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
-    tree.grid(column=0, row=0, sticky='nsew')
+    arvore.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    arvore.grid(column=0, row=0, sticky='nsew')
     vsb.grid(column=1, row=0, sticky='ns')
     hsb.grid(column=0, row=1, sticky='ew')
 
@@ -261,28 +257,16 @@ def exibir():
     n=0
 
     for col in tabela_head:
-        tree.heading(col, text=col.title(), anchor='center')
+        arvore.heading(col, text=col.title(), anchor='center')
         
-        tree.column(col, width=h[n],anchor=hd[n])
+        arvore.column(col, width=h[n],anchor=hd[n])
         
         n+=1
 
     for item in lista:
-        tree.insert('', 'end', values=item)
+        arvore.insert('', 'end', values=item)
 
 # Chamando a função Exibir
-exibir()
-    
-
-
-
-
-
-
-
-
-
-
-
+exibir()    
 
 janela.mainloop()
